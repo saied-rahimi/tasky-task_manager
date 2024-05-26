@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
-class TextField extends StatefulWidget {
-  const TextField({required this.data, required this.controller, this.hrPadding, this.vrPadding, super.key});
+class TextInput extends StatefulWidget {
+  const TextInput({required this.data, required this.controller, this.hrPadding, this.vrPadding, super.key});
   final Map data;
   final double? hrPadding;
   final double? vrPadding;
   final TextEditingController controller;
 
   @override
-  State<TextField> createState() => _TextFieldState();
+  State<TextInput> createState() => _TextInputState();
 }
 
-class _TextFieldState extends State<TextField> {
+class _TextInputState extends State<TextInput> {
   late bool obscureText;
 
   @override
@@ -24,9 +24,9 @@ class _TextFieldState extends State<TextField> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.data['type'] == 'phoneNum') {
+    if (widget.data['keyboardType'] == 'phoneNum') {
       return Padding(
-        padding: EdgeInsets.symmetric(vertical: widget.vrPadding ?? 10, horizontal: widget.hrPadding ?? 0),
+        padding: EdgeInsets.symmetric(vertical: widget.vrPadding ?? 0, horizontal: widget.hrPadding ?? 0),
         child: IntlPhoneField(
           controller: widget.controller,
           decoration: InputDecoration(
@@ -43,15 +43,16 @@ class _TextFieldState extends State<TextField> {
       return Padding(
         padding: EdgeInsets.symmetric(vertical: widget.vrPadding ?? 10, horizontal: widget.hrPadding ?? 0),
         child: TextFormField(
-          keyboardType: widget.data['keyboardType'],
+          keyboardType: TextInputType.text,
           obscureText: obscureText, // Toggle text visibility
           decoration: InputDecoration(
+            hintText: '${widget.data['hint']}',
             labelText: '${widget.data['liable']}',
             border: OutlineInputBorder(
               borderSide: const BorderSide(),
               borderRadius: BorderRadius.circular(10),
             ),
-            suffixIcon: widget.data['type'] == 'password'
+            suffixIcon: widget.data['keyboardType'] == 'password'
                 ? IconButton(
                     icon: Icon(obscureText ? Icons.visibility : Icons.visibility_off),
                     onPressed: () {
