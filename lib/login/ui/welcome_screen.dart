@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:todo_app/core/widgets/drop_down.dart';
 import 'package:todo_app/core/widgets/text_field.dart';
+import 'package:todo_app/pages/home_page.dart';
 import 'dart:math' as math;
 import '../../core/widgets/text_widgts.dart';
 
@@ -214,10 +215,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> with WidgetsBindingObserv
               ],
             ),
             onTab: () {
-              controller.animateToPage(
-                2,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomePage(),
+                ),
               );
             },
           ),
@@ -318,10 +320,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> with WidgetsBindingObserv
               ],
             ),
             onTab: () {
-              controller.animateToPage(
-                2,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomePage(),
+                ),
               );
             },
           ),

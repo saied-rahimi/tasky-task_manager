@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 class MediumTitleText extends StatelessWidget {
   const MediumTitleText({
     required this.text,
-    required this.align,
+    this.align = TextAlign.start,
     this.style,
     this.textColor,
     super.key,
   });
   final String text;
-  final TextAlign align;
+  final TextAlign? align;
   final TextStyle? style;
   final Color? textColor;
   @override
@@ -18,7 +18,7 @@ class MediumTitleText extends StatelessWidget {
       text,
       textAlign: align,
       style: style ??
-           TextStyle(
+          TextStyle(
             color: textColor,
             height: 1.7,
             fontWeight: FontWeight.w900,
@@ -26,16 +26,18 @@ class MediumTitleText extends StatelessWidget {
           ),
     );
   }
-}class SmallTitleText extends StatelessWidget {
+}
+
+class SmallTitleText extends StatelessWidget {
   const SmallTitleText({
     required this.text,
-    required this.align,
+    this.align = TextAlign.start,
     this.style,
     this.textColor,
     super.key,
   });
   final String text;
-  final TextAlign align;
+  final TextAlign? align;
   final TextStyle? style;
   final Color? textColor;
   @override
@@ -44,7 +46,7 @@ class MediumTitleText extends StatelessWidget {
       text,
       textAlign: align,
       style: style ??
-           TextStyle(
+          TextStyle(
             color: textColor,
             height: 1.7,
             fontWeight: FontWeight.w900,
