@@ -6,17 +6,20 @@ class MediumTitleText extends StatelessWidget {
     this.align = TextAlign.start,
     this.style,
     this.textColor,
+    this.maxLine = 1,
     super.key,
   });
   final String text;
   final TextAlign? align;
   final TextStyle? style;
   final Color? textColor;
+  final int? maxLine;
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
       textAlign: align,
+      maxLines: maxLine,
       style: style ??
           TextStyle(
             color: textColor,
@@ -34,17 +37,20 @@ class SmallTitleText extends StatelessWidget {
     this.align = TextAlign.start,
     this.style,
     this.textColor,
+    this.maxLine = 1,
     super.key,
   });
   final String text;
   final TextAlign? align;
   final TextStyle? style;
   final Color? textColor;
+  final int? maxLine;
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
       textAlign: align,
+      maxLines: maxLine,
       style: style ??
           TextStyle(
             color: textColor,

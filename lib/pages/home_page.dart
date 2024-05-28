@@ -7,6 +7,11 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    const text = 'Grocery Shopping sddd';
+    const text2 = 'This application is designed for shoppin';
+    final screenSize = MediaQuery.of(context).size;
+
+    debugPrint('width size is: ${screenSize.width * 0.052} ');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -83,15 +88,24 @@ class HomePage extends StatelessWidget {
                 return ListTile(
                   isThreeLine: false,
                   minVerticalPadding: 10,
-                  trailing: Image.asset(
-                    'assets/icons/tree_dots.png',
-                    height: 25,
+                  trailing: Column(
+                    children: [
+                      Image.asset(
+                        'assets/icons/tree_dots.png',
+                        height: 25,
+                      ),
+                    ],
                   ),
-                  leading: Image.asset('assets/grocery_logo.png'),
+                  leading: Image.asset(
+                    'assets/grocery_logo.png',
+                    width: 70,
+                  ),
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const SmallTitleText(text: 'Grocery Shopping'),
+                      SmallTitleText(
+                        text: truncateText('Grocery Shopping sdddsss', 0.052, screenSize),
+                      ),
                       Container(
                         decoration: BoxDecoration(
                           borderRadius: const BorderRadius.all(Radius.circular(7)),
@@ -112,7 +126,9 @@ class HomePage extends StatelessWidget {
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('his application is designed for shopin '),
+                      Text(
+                        truncateText('This application is designed for shoppinng and grocerying', 0.09, screenSize),
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: Row(
@@ -147,6 +163,66 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          InkWell(
+            onTap: () {},
+            child: Container(
+                height: 55,
+                decoration: const BoxDecoration(
+                  color: Color(0xffd3c3f8),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(50),
+                  ),
+                ),
+                margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                padding: const EdgeInsets.all(10),
+                child: Image.asset(
+                  'assets/icons/qr_code.png',
+                )),
+          ),
+          InkWell(
+            onTap: () {},
+            child: Container(
+              height: 80,
+              width: 80,
+              decoration: BoxDecoration(
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black54,
+                    blurRadius: 10,
+                    spreadRadius: 0.2,
+                    offset: Offset(0, 5),
+                  )
+                ],
+                color: theme.primaryColor,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(50),
+                ),
+              ),
+              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+
+              child: Center(
+                child: const Icon(
+                  Icons.add,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
+  }
+
+  String truncateText(String text, double maxWidth, Size screenSize) {
+    final maxLength = (screenSize.width * maxWidth).toInt();
+    if (text.length > maxLength) {
+      return '${text.substring(0, maxLength - 4)}...';
+    } else {
+      return text;
+    }
   }
 }
