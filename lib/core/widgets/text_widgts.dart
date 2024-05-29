@@ -61,3 +61,19 @@ class SmallTitleText extends StatelessWidget {
     );
   }
 }
+
+class ParagraphText extends StatelessWidget {
+  const ParagraphText(
+    this.text, {
+    super.key,
+  });
+  final String text;
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      textAlign: TextAlign.justify,
+      style: const TextStyle(height: 1.7, fontSize: 16, color: Colors.grey),
+    );
+  }
+}

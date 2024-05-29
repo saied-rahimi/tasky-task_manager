@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/core/widgets/text_widgts.dart';
+import 'package:todo_app/pages/details_page/details_page.dart';
+import 'package:todo_app/splash_screen.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -7,8 +9,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    const text = 'Grocery Shopping sddd';
-    const text2 = 'This application is designed for shoppin';
     final screenSize = MediaQuery.of(context).size;
 
     debugPrint('width size is: ${screenSize.width * 0.052} ');
@@ -37,7 +37,13 @@ class HomePage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 13),
             child: IconButton(
               icon: Image.asset('assets/icons/log_out.png'),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SplashScreen()),
+                  (Route<dynamic> route) => false,
+                );
+              },
             ),
           ),
         ],
@@ -53,7 +59,7 @@ class HomePage extends StatelessWidget {
                   text: 'My Tasks',
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                   height: 60,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
@@ -86,6 +92,14 @@ class HomePage extends StatelessWidget {
               itemCount: 20,
               itemBuilder: (context, index) {
                 return ListTile(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const DetailsPage(),
+                      ),
+                    );
+                  },
                   isThreeLine: false,
                   minVerticalPadding: 10,
                   trailing: Column(
@@ -202,9 +216,8 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-
-              child: Center(
-                child: const Icon(
+              child: const Center(
+                child: Icon(
                   Icons.add,
                   color: Colors.white,
                   size: 30,
