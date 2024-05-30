@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_app/core/widgets/text_widgts.dart';
 import 'package:todo_app/pages/details_page/details_page.dart';
 import 'package:todo_app/splash_screen.dart';
+import '../core/pref/pref.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -181,7 +182,10 @@ class HomePage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           InkWell(
-            onTap: () {},
+            onTap: () async {
+              final token = await MyPref().getToke();
+              debugPrint('token is: $token');
+            },
             child: Container(
                 height: 55,
                 decoration: const BoxDecoration(
@@ -197,7 +201,9 @@ class HomePage extends StatelessWidget {
                 )),
           ),
           InkWell(
-            onTap: () {},
+            onTap: () async {
+              await MyPref().setToke('sdfeee');
+            },
             child: Container(
               height: 80,
               width: 80,

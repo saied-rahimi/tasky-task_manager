@@ -1,9 +1,7 @@
-import 'package:flutter/gestures.dart';
+
 import 'package:flutter/material.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:todo_app/core/widgets/drop_down.dart';
-import 'package:todo_app/core/widgets/text_field.dart';
-import 'package:todo_app/pages/home_page.dart';
+import 'package:todo_app/login/ui/sign_in_page.dart';
+import 'package:todo_app/login/ui/sign_up_page.dart';
 import 'dart:math' as math;
 import '../../core/widgets/text_widgts.dart';
 
@@ -42,39 +40,16 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> with WidgetsBindingObserver {
-  final PageController controller = PageController();
+  final PageController pageController = PageController();
   bool _keyboardVisible = false;
-  bool _isRegsterPage = false;
-  final List<Map<String, dynamic>> mData = [
-    {'liable': 'Name', 'hint': 'Enter your name', 'type': 'textInput', 'keyboardType': 'text'},
-    {'liable': 'Phone Number', 'hint': 'Enter your Phone Number', 'type': 'textInput', 'keyboardType': 'phoneNum'},
-    {'liable': 'Year of experience', 'hint': 'Enter your experience', 'type': 'textInput', 'keyboardType': 'int'},
-    {
-      'hint': 'Select Experience Level',
-      'type': 'select',
-      'experienceLevels': ['Beginner', 'Intermediate', 'Advanced', 'Expert'],
-    },
-    {'liable': 'Address', 'hint': 'Enter your address', 'type': 'textInput', 'keyboardType': 'text'},
-    {'liable': 'Password', 'hint': 'Enter your password', 'type': 'textInput', 'keyboardType': 'password'},
-  ];
+  bool _isSignUpPage = false;
+
   var _pageIndex = 0;
-  final List<String> experienceLevels = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
-  String? selectedLevel;
-  List<TextEditingController> textControllerList = [];
-  late TextEditingController phoneController;
-  late TextEditingController passwordController;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this); // Add the observer
-    phoneController = TextEditingController();
-    passwordController = TextEditingController();
-    List.generate(
-      mData.length,
-      (index) => textControllerList.add(
-        TextEditingController(),
-      ),
-    );
   }
 
   @override
@@ -127,22 +102,22 @@ class _WelcomeScreenState extends State<WelcomeScreen> with WidgetsBindingObserv
                     _pageIndex = page;
                   });
                 },
-                controller: controller,
+                controller: pageController,
                 itemCount: 2,
                 itemBuilder: (context, index) {
                   Widget mWidget = Container();
                   if (index == 0) {
-                    mWidget = welcome(context, controller);
+                    mWidget = welcome(context, pageController);
                   } else {
-                    _isRegsterPage
-                        ? mWidget = signUp(context, controller, onTap: () {
+                    _isSignUpPage
+                        ? mWidget = SignUpPage(signInOnTap: () {
                             setState(() {
-                              _isRegsterPage = false;
+                              _isSignUpPage = false;
                             });
                           })
-                        : mWidget = signIn(context, controller, onTap: () {
+                        : mWidget = SignInPage(signUpOnTap: () {
                             setState(() {
-                              _isRegsterPage = true;
+                              _isSignUpPage = true;
                             });
                           });
                   }
@@ -152,203 +127,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> with WidgetsBindingObserv
                   );
                 },
               ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Padding signUp(BuildContext context, PageController controller, {required VoidCallback onTap}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          const MediumTitleText(
-            text: 'Sign up',
-            align: TextAlign.start,
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          SizedBox(
-            height: 450,
-            child: ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: mData.length,
-              itemBuilder: (context, index) {
-                if (mData[index]['type'] == 'select') {
-                  return LevelDropDown(
-                    hintText: mData[index]['hint'],
-                    levelList: mData[index]['experienceLevels'],
-                    onChanged: (value) {
-                      setState(() {
-                        selectedLevel = value!;
-                      });
-                    },
-                    selectedLevel: selectedLevel,
-                  );
-                } else {
-                  return TextInput(data: mData[index], controller: textControllerList[index]);
-                }
-              },
-            ),
-          ),
-          CustomButton(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SmallTitleText(text: 'Sign up', textColor: Colors.white, align: TextAlign.center),
-                const SizedBox(
-                  width: 5,
-                ),
-                Transform.rotate(
-                  angle: math.pi,
-                  child: Image.asset(
-                    'assets/icons/arrwo_left.png',
-                    color: Colors.white,
-                    height: 16,
-                  ),
-                ),
-              ],
-            ),
-            onTab: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomePage(),
-                ),
-              );
-            },
-          ),
-          RichText(
-            textAlign: TextAlign.center,
-            text: TextSpan(
-              text: 'Already have any account?  ',
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
-              ),
-              children: [
-                TextSpan(
-                  text: 'Sign in',
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColor, // Set the color to the primary color
-                    decoration: TextDecoration.underline, // Underline the text
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  recognizer: TapGestureRecognizer()..onTap = onTap,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Padding signIn(BuildContext context, PageController controller, {required VoidCallback onTap}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          const MediumTitleText(
-            text: 'Sign in',
-            align: TextAlign.start,
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: IntlPhoneField(
-              controller: phoneController,
-              decoration: const InputDecoration(
-                labelText: '123-456-789',
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(),
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-              ),
-              initialCountryCode: 'AF',
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: TextFormField(
-              controller: passwordController,
-              obscureText: _keyboardVisible, // Toggle text visibility
-              decoration: InputDecoration(
-                labelText: 'Enter your password',
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                suffixIcon: IconButton(
-                  icon: Icon(_keyboardVisible ? Icons.visibility : Icons.visibility_off),
-                  onPressed: () {
-                    setState(() {
-                      _keyboardVisible = !_keyboardVisible; // Toggle text visibility on button press
-                    });
-                  },
-                ),
-              ),
-            ),
-          ),
-          CustomButton(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SmallTitleText(text: 'Sign in', textColor: Colors.white, align: TextAlign.center),
-                const SizedBox(
-                  width: 5,
-                ),
-                Transform.rotate(
-                  angle: math.pi,
-                  child: Image.asset(
-                    'assets/icons/arrwo_left.png',
-                    color: Colors.white,
-                    height: 16,
-                  ),
-                ),
-              ],
-            ),
-            onTab: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomePage(),
-                ),
-              );
-            },
-          ),
-          RichText(
-            textAlign: TextAlign.center,
-            text: TextSpan(
-              text: 'Didn’t have any account? ',
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
-              ),
-              children: [
-                TextSpan(
-                  text: 'Sign Up here',
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColor, // Set the color to the primary color
-                    decoration: TextDecoration.underline, // Underline the text
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  recognizer: TapGestureRecognizer()..onTap = onTap,
-                ),
-              ],
             ),
           ),
         ],

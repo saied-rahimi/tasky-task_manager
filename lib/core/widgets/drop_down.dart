@@ -1,41 +1,58 @@
 import 'package:flutter/material.dart';
 
 class LevelDropDown extends StatelessWidget {
-  const LevelDropDown({required this.levelList, required this.onChanged, required this.selectedLevel, this.hintText, super.key});
+  const LevelDropDown(
+      {required this.levelList, required this.onChanged, required this.selectedLevel, this.hintText, required this.isValidated, super.key});
   final List<String> levelList;
   final String? selectedLevel;
   final void Function(String?)? onChanged;
   final String? hintText;
+  final bool isValidated;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: selectedLevel,
-          hint: Text(hintText ?? 'Select Experience Level'),
-          isExpanded: true,
-          dropdownColor: Colors.white, // Set dropdown menu color
-          borderRadius: BorderRadius.circular(8), // Set dropdown menu border radius
-          items: levelList.map((String level) {
-            return DropdownMenuItem<String>(
-              value: level,
-              child: Text(level),
-            );
-          }).toList(),
-          onChanged: onChanged,
-          // onChanged: (String? newValue) {
-          //   setState(() {
-          //     selectedExperienceLevel = newValue;
-          //   });
-          // },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          decoration: BoxDecoration(
+            border: Border.all(color: isValidated ? Colors.grey :  const Color(0xffab0505)),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              value: selectedLevel,
+              hint: Text(
+                hintText ?? 'Select Experience Level',
+                style: TextStyle(color: isValidated ? null :  const Color(0xffab0505)),
+              ),
+
+              isExpanded: true,
+              icon: Icon(
+                Icons.arrow_drop_down,
+                color: isValidated ? null :  const Color(0xffab0505),
+              ),
+              dropdownColor: Colors.white, // Set dropdown menu color
+              borderRadius: BorderRadius.circular(8), // Set dropdown menu border radius
+              items: levelList.map((String level) {
+                return DropdownMenuItem<String>(
+                  value: level,
+                  child: Text(level),
+                );
+              }).toList(),
+              onChanged: onChanged,
+            ),
+          ),
         ),
-      ),
+        if (!isValidated)
+          const Text(
+            'No level selected!',
+            style: TextStyle(
+              color:  Color(0xffab0505),
+            ),
+          ),
+      ],
     );
   }
 }
