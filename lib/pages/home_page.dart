@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:todo_app/core/api/api.dart';
 import 'package:todo_app/core/widgets/text_widgts.dart';
 import 'package:todo_app/pages/details_page/details_page.dart';
 import 'package:todo_app/splash_screen.dart';
@@ -38,7 +41,10 @@ class HomePage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 13),
             child: IconButton(
               icon: Image.asset('assets/icons/log_out.png'),
-              onPressed: () {
+              onPressed: () async {
+                final token = await MyPref().getToke();
+                final response = await Api().logOut(token!);
+                final body = await jsonDecode(response.body);
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const SplashScreen()),

@@ -61,4 +61,11 @@ class Api {
       debugPrint('Error: $e');
     }
   }
+
+  Future logOut(String value) async {
+    const String logOutEndpoint = '/auth/logout';
+    final url = Uri.parse(baseUrl + logOutEndpoint);
+    final response = await http.post(url, body: jsonEncode({'refresh_token': value}));
+    return response;
+  }
 }

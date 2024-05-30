@@ -56,8 +56,11 @@ class _SignInPageState extends State<SignInPage> {
         } else {
           final body = jsonDecode(response.body);
           final token = body['access_token'];
+          final refreshToken = body['refresh_token'];
+          debugPrint('sign in refreshToken is: $refreshToken');
           debugPrint('sign in token is: $token');
           await MyPref().setToke(token);
+          await MyPref().setRefreshToke(refreshToken);
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
