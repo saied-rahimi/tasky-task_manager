@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/core/utlis/item_json.dart';
+import 'package:todo_app/core/widgets/item.dart';
 import 'package:todo_app/core/widgets/text_widgts.dart';
 import 'package:todo_app/pages/details_page/details_page.dart';
 import 'package:todo_app/splash_screen.dart';
 import '../core/pref/pref.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _progressIndex = 0;
+  bool _isProgressActive = false;
+  @override
   Widget build(BuildContext context) {
+    final progressList = ['All', 'In progress', 'Waiting', 'Finished'];
     final theme = Theme.of(context);
     final screenSize = MediaQuery.of(context).size;
 
-    debugPrint('width size is: ${screenSize.width * 0.052} ');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -64,20 +73,32 @@ class HomePage extends StatelessWidget {
                   height: 60,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: 10,
+                    itemCount: progressList.length,
                     itemBuilder: (context, index) {
-                      return Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(Radius.circular(20)),
-                          color: theme.primaryColor,
-                        ),
-                        child: const Center(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                            child: SmallTitleText(
-                              text: 'All',
-                              textColor: Colors.white,
+                      if (_progressIndex == index) {
+                        _isProgressActive = true;
+                      } else {
+                        _isProgressActive = false;
+                      }
+                      return InkWell(
+                        onTap: () {
+                          setState(() {
+                            _progressIndex = index;
+                          });
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(Radius.circular(20)),
+                            color: _isProgressActive ? theme.primaryColor : theme.primaryColor.withOpacity(0.3),
+                          ),
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                              child: SmallTitleText(
+                                text: progressList[index],
+                                textColor: Colors.white,
+                              ),
                             ),
                           ),
                         ),
@@ -90,89 +111,9 @@ class HomePage extends StatelessWidget {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: 20,
+              itemCount: items.length,
               itemBuilder: (context, index) {
-                return ListTile(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const DetailsPage(),
-                      ),
-                    );
-                  },
-                  isThreeLine: false,
-                  minVerticalPadding: 10,
-                  trailing: Column(
-                    children: [
-                      Image.asset(
-                        'assets/icons/tree_dots.png',
-                        height: 25,
-                      ),
-                    ],
-                  ),
-                  leading: Image.asset(
-                    'assets/grocery_logo.png',
-                    width: 70,
-                  ),
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SmallTitleText(
-                        text: truncateText('Grocery Shopping sdddsss', 0.052, screenSize),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(Radius.circular(7)),
-                          color: Colors.red.withOpacity(0.7),
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 7,
-                          ),
-                          child: Text(
-                            'Waiting',
-                            style: TextStyle(color: Colors.white, fontSize: 14),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        truncateText('This application is designed for shoppinng and grocerying', 0.09, screenSize),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Image.asset(
-                                  'assets/icons/flag.png',
-                                  height: 20,
-                                  color: theme.primaryColor,
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  'low',
-                                  style: TextStyle(color: theme.primaryColor),
-                                )
-                              ],
-                            ),
-                            const Text('2024/06/12'),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                );
+                return Item(item: items[index]);
               },
             ),
           ),
@@ -234,14 +175,5 @@ class HomePage extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  String truncateText(String text, double maxWidth, Size screenSize) {
-    final maxLength = (screenSize.width * maxWidth).toInt();
-    if (text.length > maxLength) {
-      return '${text.substring(0, maxLength - 4)}...';
-    } else {
-      return text;
-    }
   }
 }
